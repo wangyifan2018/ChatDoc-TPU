@@ -1,0 +1,16 @@
+.idea
+.DS_Store
+data/uploaded/*
+!data/uploaded/.gitkeep
+
+data/db/*
+!data/db/.gitkeep
+
+data/db_tpu/*
+!data/db_tpu/.gitkeep
+
+__pycache__
+embedding/*
+embedding_tpu/*
+!embedding/.gitkeep
+!embedding_tpu/.gitkeep
