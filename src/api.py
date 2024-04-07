@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from chatbot import DocChatbot
+from .chatbot import DocChatbot
 
 app = Flask(__name__)
 chatbot_st = DocChatbot.get_instance()

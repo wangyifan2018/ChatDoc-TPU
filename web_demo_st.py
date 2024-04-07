@@ -1,9 +1,10 @@
 # coding=utf-8
-from chatbot import DocChatbot
+from src.chatbot import DocChatbot
 import os
 import streamlit as st
 import time
-
+import sys
+sys.path.append(".")
 
 @st.cache_resource
 def load_model():
@@ -41,7 +42,7 @@ def cut_history(u_input):
 
 
 with st.sidebar:
-    st.title("💬 ChatDoc")
+    st.title("💬 ChatDoc-TPU")
     st.write("上传一个文档，然后与我对话.")
     with st.form("Upload and Process", True):
         uploaded_file = st.file_uploader("上传文档", type=["pdf", "txt", "docx"], accept_multiple_files=True,
