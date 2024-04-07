@@ -31,11 +31,11 @@ def fp16_cast(arr:np.ndarray): #这个接口的作用在于把np.float16假冒�
 
 class TPUChatglm:
     def __init__(self):
-        # config = configparser.ConfigParser()
-        # config.read('config.ini')
-        bmodel_path = "../chatglm-int8-2048/chatglm3-6b_int8_1dev.bmodel"
-        token_path = "../chatglm-int8-2048/token_config/"
-        dev_id = 5
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        bmodel_path = config.get('llm_model', 'bmodel_path')
+        token_path = config.get('llm_model', 'token_path')
+        dev_id = int(config.get('llm_model', 'dev_id'))
         # load tokenizer
         print("Load " + token_path + " ...")
         self.input_str = ""

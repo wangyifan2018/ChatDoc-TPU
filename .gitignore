@@ -11,6 +11,13 @@ data/db_tpu/*
 
 __pycache__
 embedding/*
-embedding_tpu/*
+# embedding_tpu/*
 !embedding/.gitkeep
 !embedding_tpu/.gitkeep
+nltk_data/
+
+*.zip
+models/
+*.bmodel
+*.bin
+*.pt
