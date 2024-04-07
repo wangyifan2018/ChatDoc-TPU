@@ -1,4 +1,4 @@
-# ChatDoc
+# ChatDoc-TPU
 
 这个项目是基于[ChatGLM3-TPU](https://github.com/sophgo/sophon-demo/tree/release/sample/ChatGLM3)实现的文档对话工具。项目可在BM1684X上独立部署运行。
 
@@ -17,7 +17,7 @@
 
 ## 安装
 
-按照以下步骤，可以将这个项目部署到SoPhGo盒子上。
+按照以下步骤，可以将这个项目部署到SophGo的设备上
 
 1. 克隆代码:
 ```bash
@@ -29,41 +29,22 @@ cd ChatDoc-TPU
 ```
 3. 安装依赖
 ```bash
+# python 3.9 测试无误，其他版本待定
 virtualenv glm
 
 source glm/bin/activate
 
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-
 ```
+此外还依赖新版本sail，安装方法可参考[sail安装](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/python/README.md#1-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87)
 
-4. 下载embedding模型
-
-embedding分为cpu版本和tpu版本，任选其一即可。
-- TPU版本
-百度网盘链接: https://pan.baidu.com/s/18wARtq7JdnzphUt9M9HScw?pwd=t2f3
-下载完成将下载的embedding_tpu文件夹覆盖chatdoc目录下的embedding_tpu。
-
-- CPU版本
-百度网盘链接: https://pan.baidu.com/s/1yFrk0Jtmbfr-nHnWvXF6AA?pwd=x5rw
-下载完成将下载的embedding文件夹覆盖chatdoc目录下的embedding。
-
-5. 下载模型文件
-
-百度网盘链接：https://pan.baidu.com/s/1smurhVaLELoNmIYHOA8zXg?pwd=a484
-下载完成将下载的chatglm-int8-2048文件夹放置在与chatdoc同级目录下，注意chatdoc和chatglm-int8-2048是并列关系。
-
-6. 下载NLTK语料库
-
-百度网盘链接：https://pan.baidu.com/s/1DzSiDClzyE5TzMygqGI4rg?pwd=22hr
-下载完成将下载的nltk_data文件夹拷贝到用户跟目录，即`cp -r nltk_data ~/`
+4. 下载模型和配置文件
+```bash
+./download.sh
+```
 
 ## 项目结构树
 ```
-|-- chatglm-int8-2048     -- 模型文件
-    |-- chatglm2-6b_2048_int8.bmodel
-    |-- libtpuchat.so
-    |-- tokenizer.model
 |-- chatdoc
     |-- README.md         -- README
     |-- api.py            -- API服务脚本
@@ -71,20 +52,20 @@ embedding分为cpu版本和tpu版本，任选其一即可。
     |-- chatbot.py        -- ChatDoc业务逻辑脚本
     |-- config.ini        -- 推理模型配置文件
     |-- requirements.txt  -- 项目依赖
-    |-- run.sh            -- 启动脚本
+    |-- run_emb_tpu.sh    -- 启动脚本
     |-- web_demo_st.py    -- 页面交互脚本
     |-- data
         |-- db            -- 知识库持久化目录
         |-- uploaded      -- 已上传文件目录
     |-- embedding_tpu     -- 文本嵌入模型TPU版本
-    |-- embedding         -- 文本嵌入模型CPU版本
     |-- static            -- README中图片文件
 ```
 
 ## 启动
 
 1. 激活环境 `source glm/bin/activate`
-2. 启动cpu版的embedding程序`bash run.sh` 或启动tpu版的embedding程序`bash run_emb_tpu.sh`
+2. 配置 `config.ini` 中的模型地址
+3. 启动tpu版的embedding程序`bash run_emb_tpu.sh`
 
 
 ## 操作说明
