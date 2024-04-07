@@ -29,7 +29,7 @@ cd ChatDoc-TPU
 ```
 3. 安装依赖
 ```bash
-# python 3.9 测试无误，其他版本待定
+# 已在 python 3.9 测试，可在虚拟环境中运行(venv、conda)
 virtualenv glm
 
 source glm/bin/activate
@@ -40,32 +40,46 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 4. 下载模型和配置文件
 ```bash
-./download.sh
+# install if need
+sudo apt install unzip
+
+# 模型文件在chatdoc目录下解压
+# 链接: https://pan.baidu.com/s/1s71b4THQu--RZfmTwNwU3Q 提取码: nk88
+unzip models.zip
+
+# nltk_data 文件夹需要放置在 ~ 目录下
+# 链接: https://pan.baidu.com/s/1C80ohxNm9kaat4Sek3ooGg 提取码: ksy3
+unzip nltk_data.zip
+mv nltk_data ~
 ```
 
 ## 项目结构树
 ```
 |-- chatdoc
-    |-- README.md         -- README
-    |-- api.py            -- API服务脚本
-    |-- chat.py           -- Python调用cpp推理接口脚本
-    |-- chatbot.py        -- ChatDoc业务逻辑脚本
-    |-- config.ini        -- 推理模型配置文件
-    |-- requirements.txt  -- 项目依赖
-    |-- run_emb_tpu.sh    -- 启动脚本
-    |-- web_demo_st.py    -- 页面交互脚本
     |-- data
-        |-- db            -- 知识库持久化目录
+        |-- db_tpu        -- 知识库持久化目录
         |-- uploaded      -- 已上传文件目录
+    |-- models
+        |-- llm_model     -- LLM 模型
+        |-- bert_model    -- BERT 模型
+    |-- src
+        |-- chatbot.py    -- ChatDoc业务逻辑脚本
+        |-- chat.py       -- Python调用chatglm3
+        |-- api.py        -- API服务脚本
     |-- embedding_tpu     -- 文本嵌入模型TPU版本
     |-- static            -- README中图片文件
+    |-- README.md         -- README
+    |-- config.ini        -- 推理模型配置文件
+    |-- requirements.txt  -- 项目依赖
+    |-- run.sh            -- 启动脚本
+    |-- web_demo_st.py    -- 页面交互脚本
 ```
 
 ## 启动
 
 1. 激活环境 `source glm/bin/activate`
 2. 配置 `config.ini` 中的模型地址
-3. 启动tpu版的embedding程序`bash run_emb_tpu.sh`
+3. 启动tpu版的embedding程序`bash run.sh`
 
 
 ## 操作说明
