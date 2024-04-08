@@ -14,9 +14,3 @@ class Word2VecEmbedding(Embeddings):
         embeddings_tpu = self.model.encode_tpu(texts)
         return embeddings_tpu.tolist()
 
-
-# if __name__ == "__main__":
-#     w = Word2VecEmbedding()
-#     print(w.embed_documents(["你好", "你哈说", "没事撒", "来了"]))
-#     print(w.embed_query("来了"))
-#     print("over thing")

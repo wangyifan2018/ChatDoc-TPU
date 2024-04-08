@@ -11,12 +11,14 @@ import logging
 import pickle
 from langchain.embeddings import HuggingFaceEmbeddings
 from embedding_tpu.embedding import Word2VecEmbedding
-from .chat import TPUChatglm
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from typing import List
 from glob import glob
 from tqdm import tqdm
 import cpuinfo
+
+from .chat import TPUChatglm
+
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 

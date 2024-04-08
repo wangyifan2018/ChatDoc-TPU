@@ -1,11 +1,9 @@
 # coding=utf-8
-
 import configparser
 import ctypes
 
 import sophon.sail as sail
 from transformers import AutoTokenizer
-import sentencepiece as spm
 import numpy as np
 import time
 
