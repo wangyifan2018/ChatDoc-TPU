@@ -263,7 +263,6 @@ class SentenceModel:
 
         if input_is_string:
             all_embeddings = all_embeddings[0]
-
         return all_embeddings
 
     def encode(
