@@ -1,4 +1,12 @@
 # coding=utf-8
+#===----------------------------------------------------------------------===#
+#
+# Copyright (C) 2022 Sophgo Technologies Inc.  All rights reserved.
+#
+# SOPHON-DEMO is licensed under the 2-Clause BSD License except for the
+# third-party components.
+#
+#===----------------------------------------------------------------------===#
 import os
 import shutil
 import time
@@ -15,11 +23,9 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from typing import List
 from glob import glob
 from tqdm import tqdm
-import cpuinfo
 
-from .chat import TPUChatglm
-
-
+from .chatglm3.chatglm3 import Chatglm3
+from .qwen.qwen import Qwen
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
@@ -35,10 +41,13 @@ class DocChatbot:
     def __init__(self) -> None:
         self.llm = None
 
-        cpu_info = cpuinfo.get_cpu_info()
-        cpu_name = cpu_info['brand_raw']
-        if cpu_name != "Apple M1 Pro":
-            self.llm = TPUChatglm()
+        llm_model = os.getenv("LLM_MODEL")
+        if llm_model == "chatglm3":
+            self.llm = Chatglm3()
+        elif llm_model == "qwen":
+            self.llm = Qwen()
+        else:
+            logging.error("llm_model error: {}".format(llm_model))
 
         self.vector_db = None
         self.string_db = None
@@ -100,8 +109,11 @@ class DocChatbot:
         if self.vector_db is None:
             self.files = ", ".join([item.split("/")[-1] for item in file_list])
             emb = self.docs2embedding([x.page_content for x in docs])
+            emb = np.array(emb).astype(np.float32)
+            if not emb.flags['C_CONTIGUOUS']:
+                emb = np.ascontiguousarray(emb)
             self.vector_db = faiss.IndexFlatL2(self.embeddings_size)
-            self.vector_db.add(np.array(emb))
+            self.vector_db.add(emb)
             self.string_db = docs
         else:
             self.files = self.files + ", " + ", ".join([item.split("/")[-1] for item in file_list])
@@ -177,11 +189,3 @@ class DocChatbot:
             cls._instance = DocChatbot()
         return cls._instance
 
-# if __name__ == "__main__":
-#     loader = UnstructuredWordDocumentLoader("./data/uploaded/北方航空科技 框架合同 1.docx")
-#     doc = loader.load()
-#     print(doc[0].page_content)
-#     print(filter_space(doc[0].page_content))
-#     text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=0,
-#                                                    separators=["\n\n", "\n", "。", "！", "，", " ", ""])
-#     doc = text_splitter.split_documents(doc)

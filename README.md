@@ -1,10 +1,11 @@
 # ChatDoc-TPU
 
-这个项目是基于[ChatGLM3-TPU](https://github.com/sophgo/sophon-demo/tree/release/sample/ChatGLM3)实现的文档对话工具。项目可在BM1684X上独立部署运行。
+这个项目是基于 Sophgo TPU 实现的文档对话工具。项目可在 BM1684X 上独立部署运行。
 
 
 ## 介绍
-该项目的主要目标是通过使用自然语言来简化与文档的交互，并提取有价值的信息。此项目使用LangChain和ChatGLM2构建，以向用户提供流畅自然的对话体验。
+
+该项目的主要目标是通过使用自然语言来简化与文档的交互，并提取有价值的信息。此项目使用LangChain、[ChatGLM3-TPU](https://github.com/sophgo/sophon-demo/tree/release/sample/ChatGLM3)或[QWEN-TPU](https://github.com/sophgo/sophon-demo/tree/release/sample/Qwen)构建，以向用户提供流畅自然的对话体验。
 
 
 ## 特点
@@ -29,29 +30,12 @@ cd ChatDoc-TPU
 ```
 3. 安装依赖
 ```bash
-# 已在 python 3.9 测试，可在虚拟环境中运行(venv、conda)
-virtualenv glm
-
-source glm/bin/activate
-
+# 考虑到 langchain 和 sail 版本依赖，推荐在 python>=3.9 环境运行
+# 已在 python==3.9 环境测试通过
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
-此外还依赖新版本sail，安装方法可参考[sail安装](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/python/README.md#1-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87)
+**此外还依赖新版本sail**，安装方法可参考[sail安装](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/python/README.md#1-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87)
 
-4. 下载模型和配置文件
-```bash
-# install if need
-sudo apt install unzip
-
-# 模型文件在chatdoc目录下解压
-# 链接: https://pan.baidu.com/s/1s71b4THQu--RZfmTwNwU3Q 提取码: nk88
-unzip models.zip
-
-# nltk_data 文件夹需要放置在 ~ 目录下
-# 链接: https://pan.baidu.com/s/1C80ohxNm9kaat4Sek3ooGg 提取码: ksy3
-unzip nltk_data.zip
-mv nltk_data ~
-```
 
 ## 项目结构树
 ```
@@ -60,11 +44,13 @@ mv nltk_data ~
         |-- db_tpu        -- 知识库持久化目录
         |-- uploaded      -- 已上传文件目录
     |-- models
-        |-- llm_model     -- LLM 模型
         |-- bert_model    -- BERT 模型
+        |-- glm3_model    -- charglm3-6B 模型
+        |-- qwen_model    -- qwen-7B 模型
     |-- src
         |-- chatbot.py    -- ChatDoc业务逻辑脚本
-        |-- chat.py       -- Python调用chatglm3
+        |-- charglm3      -- charglm3 代码
+        |-- qwen          -- qwen 代码
         |-- api.py        -- API服务脚本
     |-- embedding_tpu     -- 文本嵌入模型TPU版本
     |-- static            -- README中图片文件
@@ -77,10 +63,14 @@ mv nltk_data ~
 
 ## 启动
 
-1. 激活环境 `source glm/bin/activate`
-2. 配置 `config.ini` 中的模型地址
-3. 启动tpu版的embedding程序`bash run.sh`
+启动程序，模型和配置文件自动下载
 
+| Model           | SoC                                |
+| :-------------- | :--------------------------------- |
+| ChatGLM3-6B     | bash ./run.sh --model chatglm3     |
+| Qwen-7B         | bash ./run.sh --model qwen         |
+
+`config.ini` 中设置默认模型地址、device id
 
 ## 操作说明
 

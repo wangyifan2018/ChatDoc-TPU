@@ -1,39 +1,28 @@
 # coding=utf-8
+#===----------------------------------------------------------------------===#
+#
+# Copyright (C) 2022 Sophgo Technologies Inc.  All rights reserved.
+#
+# SOPHON-DEMO is licensed under the 2-Clause BSD License except for the
+# third-party components.
+#
+#===----------------------------------------------------------------------===#
 import configparser
-import ctypes
-
-import sophon.sail as sail
 from transformers import AutoTokenizer
 import numpy as np
 import time
+import sophon.sail as sail
 
-#convert sail_dtype to numpy dtype
-def type_convert(sail_dtype):
-    if sail_dtype == sail.Dtype.BM_FLOAT32:
-        return np.float32
-    if sail_dtype == sail.Dtype.BM_FLOAT16:
-        return np.float16
-    if sail_dtype == sail.Dtype.BM_INT32:
-        return np.int32
+from ..utils import fp16_cast, type_convert
 
-    raise TypeError("only support float32 and int32 right now")
 
-def fp16_cast(arr:np.ndarray): #这个接口的作用在于把np.float16假冒成np.uint16传进Tensor，sail update_data如果能接收传输二进制，那就不需要这个了。
-    """
-    reinterpret an array with int16 instead of float16, because pybind11 do not support float16.
-    """
-    if arr.dtype == np.float16:
-        return arr.view(np.uint16)
-    else:
-        return arr
-
-class TPUChatglm:
+class Chatglm3:
     def __init__(self):
         config = configparser.ConfigParser()
         config.read('config.ini')
-        bmodel_path = config.get('llm_model', 'bmodel_path')
-        token_path = config.get('llm_model', 'token_path')
-        dev_id = int(config.get('llm_model', 'dev_id'))
+        bmodel_path = config.get('glm3_model', 'bmodel_path')
+        token_path = config.get('glm3_model', 'token_path')
+        dev_id = int(config.get('glm3_model', 'dev_id'))
         # load tokenizer
         print("Load " + token_path + " ...")
         self.input_str = ""
@@ -313,109 +302,3 @@ class TPUChatglm:
         print()
         print(f"FTL: {first_duration:.3f} s")
         print(f"TPS: {tps:.3f} token/s")
-
-        # if self.token_length >= self.SEQLEN:
-        #     print("\n... (history reach the maximal length)", flush=True, end='')
-        #     self.history.clear()
-
-
-    def get_config(self):
-        pass
-
-class TokenWord(ctypes.Structure):
-    _fields_ = [
-        ("token", ctypes.c_int),
-        ("word", ctypes.c_char * 2048)  # 假设最大长度为 100，你可以根据实际情况调整
-    ]
-
-
-# class TPUChatglm:
-#     def __init__(self):
-#         config = configparser.ConfigParser()
-#         config.read('config.ini')
-#         self.lib = ctypes.cdll.LoadLibrary(config.get('llm_model', 'libtpuchat_path'))
-#         device_id = 5
-#         bmodel_path = config.get('llm_model', 'bmodel_path')
-#         token_path = config.get('llm_model', 'token_path')
-#         self.device_id = device_id
-#         self.bmodel_path = bmodel_path
-#         self.token_path = token_path
-#         self.libset()
-#         self.init()
-
-#     def libset(self):
-#         self.lib.ChatGLM2_with_devid_and_model.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p]
-#         self.lib.ChatGLM2_with_devid_and_model.restype = ctypes.c_void_p
-
-#         self.lib.ChatGLM2_delete.argtypes = [ctypes.c_void_p]
-
-#         # deinit
-#         self.lib.ChatGLM2_deinit.argtypes = [ctypes.c_void_p]
-
-#         # ChatGLM2_predict_first_token
-#         self.lib.ChatGLM2_predict_first_token.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
-#         self.lib.ChatGLM2_predict_first_token.restype = ctypes.c_char_p
-
-#         # ChatGLM2_predict_next_token
-#         self.lib.ChatGLM2_predict_next_token.argtypes = [ctypes.c_void_p]
-#         self.lib.ChatGLM2_predict_next_token.restype = ctypes.c_char_p
-
-#         # get_eos
-#         self.lib.get_eos.argtypes = [ctypes.c_void_p]
-#         self.lib.get_eos.restype = ctypes.c_int
-#         # get_history
-#         self.lib.get_history.argtypes = [ctypes.c_void_p]
-#         self.lib.get_history.restype = ctypes.c_char_p
-#         # set history
-#         self.lib.set_history.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
-
-#     def init(self):
-#         self.obj = self.lib.ChatGLM2_with_devid_and_model(self.device_id, self.bmodel_path.encode('utf-8'),
-#                                                           self.token_path.encode('utf-8'))
-
-#     def predict_first_token(self, context):
-#         return self.lib.ChatGLM2_predict_first_token(self.obj, context.encode('utf-8')).decode('utf-8')
-
-#     def predict_next_token(self):
-#         return self.lib.ChatGLM2_predict_next_token(self.obj).decode('utf-8')
-
-    # def stream_predict(self, query, history):
-    #     import pdb; pdb.set_trace()
-    #     history = []
-    #     history.append((query, ''))
-
-    #     prompt = ''
-    #     if len(history) > 1:
-    #         prompt += "{}\n\n答：{}\n\n".format(history[0][0], history[0][1])
-    #         for i, (old_query, response) in enumerate(history[1:-1]):
-    #             prompt += "[Round {}]\n\n问：{}\n\n答：{}\n\n".format(i + 1, old_query, response)
-    #         prompt += "[Round {}]\n\n问：{}".format(len(history), query)
-    #     else:
-    #         prompt += "{}".format(query)
-
-    #     res = ''
-    #     first_token = self.forward_first(prompt)
-    #     res += first_token
-
-    #     while True:
-    #         next_token = self.predict_next_token()
-    #         if next_token ==  self.EOS:
-    #             break
-    #         res += next_token
-    #         history[-1] = (query, res)
-    #         yield res, history
-
-#     def get_config(self):
-#         pass
-
-
-if __name__ == "__main__":
-    import pdb;pdb.set_trace()
-    chatglm = TPUChatglm()
-    for respone, history in chatglm.stream_predict("你好", ''):
-        print(respone)
-
-
-    # import pdb
-    # pdb.set_trace()
-    pass
