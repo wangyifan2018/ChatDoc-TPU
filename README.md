@@ -28,6 +28,8 @@
 
 该项目的主要目标是通过使用自然语言来简化与文档的交互，并提取有价值的信息。此项目使用LangChain、[ChatGLM3-TPU](https://github.com/sophgo/sophon-demo/tree/release/sample/ChatGLM3)或[QWEN-TPU](https://github.com/sophgo/sophon-demo/tree/release/sample/Qwen)构建，以向用户提供流畅自然的对话体验。
 
+以 ChatGPT 为例（可替换为其他LLM，本仓库已支持 Chatglm3 和 Qwen，需要保证接口一致），本地知识库问答流程如下：
+![Flow](<./static/embedding.png>)
 
 ## 特点
 
@@ -62,6 +64,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 Sail的安装可以参考[sophon-sail编译安装指南](https://doc.sophgo.com/sdk-docs/v23.07.01/docs_latest_release/docs/sophon-sail/docs/zh/html/1_build.html#)自己编译sophon-sail。
 ```bash
+pip install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
 python3 -m dfss --url=open@sophgo.com:sophon-demo/ChatGLM3/sail/sophon-sail_20240226.tar.gz
 tar xvf sophon-sail_20240226.tar.gz
 ```
@@ -69,6 +72,7 @@ tar xvf sophon-sail_20240226.tar.gz
 
 创建编译文件夹build,并进入build文件夹
 ```bash
+cd sophon-sail
 mkdir build && cd build
 ```
 执行编译命令
@@ -122,23 +126,24 @@ pip install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
 
 ## 启动
 
-启动程序，模型和配置文件自动下载
+回到`ChatDoc-TPU`主目录，启动程序，模型和配置文件自动下载
 
 | Model           | SoC                                |
 | :-------------- | :--------------------------------- |
 | ChatGLM3-6B     | bash ./run.sh --model chatglm3     |
 | Qwen-7B         | bash ./run.sh --model qwen         |
 
-`config.ini` 中设置默认模型地址、device id
+- 在 `config.ini` 中设置默认模型地址、dev_id
+- 默认 dev_id=0，需要修改为 BM1684X 设备的 dev_id
 
 ## 操作说明
 
-![Alt text](<./static/img1.png>)
+![UI](<./static/img1.png>)
 
 ### 界面简介
 ChatDoc由控制区和聊天对话区组成。控制区用于管理文档和知识库，聊天对话区用于输入消息接受消息。
 
-上图中的10号区域是ChatDoc当前选中的文档。若10号区域为空，即ChatDoc没有选中任何文档，仍在聊天对话区与ChatDoc对话，则此时的ChatDoc是一个单纯依托ChatGLM2的ChatBot。
+上图中的10号区域是 ChatDoc 当前选中的文档。若10号区域为空，即 ChatDoc 没有选中任何文档，仍在聊天对话区与 ChatDoc 对话，则此时的 ChatDoc 是一个单纯依托 LLM 的 ChatBot。
 
 ### 上传文档
 点击`1`选择要上传的文档，然后点击按钮`4`构建知识库。随后将embedding文档，完成后将被选中，并显示在10号区域，接着就可开始对话。我们可重复上传文档，embedding成功的文档均会进入10号区域。
@@ -156,7 +161,7 @@ ChatDoc由控制区和聊天对话区组成。控制区用于管理文档和知�
 
 ### 重命名知识库
 
-![Alt text](<./static/img2.png>)
+![Rename](<./static/img2.png>)
 
 由于知识库的命名是由其文档的名称组合而来，难免造成知识库名称过长的问题，ChatDoc提供了一个修改知识库名称的功能，选择框`2`选择我们要修改的知识库，然后点击按钮`9`重命名知识库，随后ChatDoc将弹出一个输入框和一个确认按钮，如上图。在输出框输入我们修改至的名称，然后点击确认重命名按钮。
 

@@ -24,3 +24,5 @@ models/qwen_model
 *.pt
 
 *.pdf
+
+sophon-sail/
