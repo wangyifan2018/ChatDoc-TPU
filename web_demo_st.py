@@ -1,5 +1,5 @@
 # coding=utf-8
-from src import DocChatbot
+from chat import DocChatbot
 import os
 import streamlit as st
 import time
@@ -15,7 +15,7 @@ def load_model():
 
 chatbot_st = load_model()
 
-
+# TODO: use glm2 format and hard code now, new to opt
 def cut_history(u_input):
     if 'messages' not in st.session_state:
         return []
@@ -185,7 +185,7 @@ if user_input := st.chat_input():
             docs = chatbot_st.query_from_doc(user_input, 3)
             logging.info("Total quire time {}".format(time.time()- start_time))
             refer = "\n".join([x.page_content.replace("\n", '\t') for x in docs])
-            PROMPT = """{}\n现在你是一个本地知识库问答助手，请根据下面的参考文档回答上述问题。\n{}\n"""
+            PROMPT = """{}。\n请根据下面的参考文档回答上述问题。\n{}\n"""
             prompt = PROMPT.format(user_input, refer)
 
             for result_answer, _ in chatbot_st.llm.stream_predict(prompt, []):
