@@ -114,7 +114,6 @@ pip install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
         |-- chatbot.py    -- ChatDoc业务逻辑脚本
         |-- charglm3      -- charglm3 代码
         |-- qwen          -- qwen 代码
-        |-- api.py        -- API服务脚本
     |-- embedding_tpu     -- 文本嵌入模型TPU版本
     |-- static            -- README中图片文件
     |-- README.md         -- README
