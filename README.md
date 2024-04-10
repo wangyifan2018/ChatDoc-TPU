@@ -110,7 +110,7 @@ pip install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
         |-- bert_model    -- BERT 模型
         |-- glm3_model    -- charglm3-6B 模型
         |-- qwen_model    -- qwen-7B 模型
-    |-- src
+    |-- chat
         |-- chatbot.py    -- ChatDoc业务逻辑脚本
         |-- charglm3      -- charglm3 代码
         |-- qwen          -- qwen 代码
