@@ -264,7 +264,6 @@ class Chatglm3:
         if len(tokens) > self.SEQLEN:
             logging.warning("The maximum question length should be shorter than {} but we get {} instead, \
                 history will be cleared, please ask again".format(self.SEQLEN, len(tokens)))
-            self.history.clear()
             return
 
         first_start = time.time()
@@ -273,17 +272,14 @@ class Chatglm3:
         pre_token = 30910
         pre_ids = [pre_token]
         pre_word= self.sp.decode(pre_ids)
-        res = ""
         # Sentencepiece will remove space token if the token list it receive has only one token, we add a pre_token so that space token will not be removed.
         while token != self.EOS and self.token_length < self.SEQLEN:
             ids = [pre_token, token]
             word = self.sp.decode(ids)
             diff = word[len(pre_word):]
             answer_cur += [token]
-            res += diff
-            yield res, history
+            yield self.sp.decode(answer_cur), history
             print(diff, flush=True, end='')
-            # if self.token_length < self.SEQLEN:
             self.token_length += 1
             tok_num += 1
             token = self.forward_next()
