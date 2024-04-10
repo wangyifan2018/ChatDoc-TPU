@@ -10,15 +10,16 @@ data/db_tpu/*
 !data/db_tpu/.gitkeep
 
 __pycache__
-embedding/*
-!embedding/.gitkeep
-!embedding_tpu/.gitkeep
+
 nltk_data/
 
 *.zip
-models/bert_model
-models/glm3_model
-models/qwen_model
+*.tar
+*.tar.gz
+
+models/
+!models/.gitkeep
+
 *.bmodel
 *.bin
 *.pt

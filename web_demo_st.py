@@ -1,10 +1,12 @@
 # coding=utf-8
-from src.chatbot import DocChatbot
+from src import DocChatbot
 import os
 import streamlit as st
 import time
 import sys
+import logging
 sys.path.append(".")
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 @st.cache_resource
 def load_model():
@@ -171,7 +173,6 @@ if user_input := st.chat_input():
         st.chat_message("user").write(user_input)
         with st.chat_message("assistant"):
             answer_container = st.empty()
-            # for result_answer, _ in stream_predict(user_input, his):
             for result_answer, _ in chatbot_st.llm.stream_predict(user_input, his):
                 answer_container.markdown(result_answer)
         st.session_state["messages"].append({"role": "assistant", "content": result_answer})
@@ -180,13 +181,13 @@ if user_input := st.chat_input():
         st.chat_message("user").write(user_input)
         with st.chat_message("assistant"):
             answer_container = st.empty()
-
+            start_time = time.time()
             docs = chatbot_st.query_from_doc(user_input, 3)
+            logging.info("Total quire time {}".format(time.time()- start_time))
             refer = "\n".join([x.page_content.replace("\n", '\t') for x in docs])
             PROMPT = """{}\n现在你是一个本地知识库问答助手，请根据下面的参考文档回答上述问题。\n{}\n"""
             prompt = PROMPT.format(user_input, refer)
 
-            # for result_answer, _ in stream_predict(user_input, []):
             for result_answer, _ in chatbot_st.llm.stream_predict(prompt, []):
                 answer_container.markdown(result_answer)
 

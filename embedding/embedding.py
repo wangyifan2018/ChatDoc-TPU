@@ -1,6 +1,15 @@
+# -*- coding: utf-8 -*-
+#===----------------------------------------------------------------------===#
+#
+# Copyright (C) 2022 Sophgo Technologies Inc.  All rights reserved.
+#
+# SOPHON-DEMO is licensed under the 2-Clause BSD License except for the
+# third-party components.
+#
+#===----------------------------------------------------------------------===#
 from langchain.embeddings.base import Embeddings
-from embedding_tpu.text2vec.sentence_model import SentenceModel
 from typing import List
+from .sentence_model import SentenceModel
 
 
 class Word2VecEmbedding(Embeddings):

@@ -90,8 +90,6 @@ else
 fi
 
 
-export EMBEDDING_TYPE="tpu"
-
 export LLM_MODEL=$llm_model
 
 streamlit run web_demo_st.py --server.address '0.0.0.0'

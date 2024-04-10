@@ -7,4 +7,4 @@
 # third-party components.
 #
 #===----------------------------------------------------------------------===#
-from .chatbot import DocChatbot
+from .embedding import Word2VecEmbedding
