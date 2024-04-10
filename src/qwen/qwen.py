@@ -7,13 +7,16 @@
 # third-party components.
 #
 #===----------------------------------------------------------------------===#
-import sophon.sail as sail
 import configparser
 import time
 from .tokenization_util import make_context
 from transformers import AutoTokenizer
 import numpy as np
+import logging
+import sophon.sail as sail
+
 from ..utils import fp16_cast, type_convert
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
 class Qwen:
@@ -24,21 +27,20 @@ class Qwen:
         token_path = config.get('qwen_model', 'token_path')
         dev_id = int(config.get('qwen_model', 'dev_id'))
         self.input_str = ""
-        self.system_prompt = "You are QWEN, a large language model. Follow the user's instructions carefully. Respond using markdown."
+        self.system_prompt = "You are QWEN, a large language model. Follow the user's instructions carefully."
         self.history = []
 
         # load tokenizer
-        print("Load " + token_path + " ...")
         self.sp = AutoTokenizer.from_pretrained(token_path, trust_remote_code=True)
-
+        logging.info("load {} success!".format(token_path))
         # warm up
         self.sp.decode([0])
         self.EOS = self.sp.im_end_id
-        print("Done!")
 
         # load bmodel
         # 这里devio，后面都没有创建系统内存的tensor
         self.net = sail.Engine(bmodel_path, dev_id, sail.IOMode.DEVIO)
+        logging.info("load {} success!".format(bmodel_path))
         self.handle = sail.Handle(dev_id)
         self.graph_names = self.net.get_graph_names()
 
@@ -253,10 +255,10 @@ class Qwen:
         self.answer_cur = ""
 
         if not tokens:
-            print("Sorry: your question is too wierd!!")
+            logging.error("Sorry: your question is too wierd!!")
             return
         if self.token_length > self.SEQLEN:
-            print("The maximum question length should be shorter than {} but we get {} instead.".format(self.SEQLEN, self.token_length))
+            logging.error("The maximum question length should be shorter than {} but we get {} instead.".format(self.SEQLEN, self.token_length))
             return
 
         # First token
@@ -282,11 +284,6 @@ class Qwen:
         next_duration = next_end-first_end
         tps = tok_num / next_duration
 
-        # if self.token_length >= self.SEQLEN - 128:
-        #     print("... (reach the maximal length)", flush=True, end='')
-        #     self.history.clear()
-        # else:
-        #     self.history.append([self.input_str, self.answer_cur])
 
         print()
         print(f"FTL: {first_duration:.3f} s")

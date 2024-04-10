@@ -11,9 +11,11 @@ import configparser
 from transformers import AutoTokenizer
 import numpy as np
 import time
+import logging
 import sophon.sail as sail
 
 from ..utils import fp16_cast, type_convert
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
 class Chatglm3:
@@ -24,24 +26,20 @@ class Chatglm3:
         token_path = config.get('glm3_model', 'token_path')
         dev_id = int(config.get('glm3_model', 'dev_id'))
         # load tokenizer
-        print("Load " + token_path + " ...")
         self.input_str = ""
         self.system = [{"role":"system",
                         "content":"You are ChatGLM3, a large language model trained by Zhipu.AI. Follow the user's instructions carefully. Respond using markdown."}]
         self.history = []
         self.sp = AutoTokenizer.from_pretrained(token_path, trust_remote_code=True)
+        logging.info("load {} success!".format(token_path))
         # warm up
         self.sp.decode([0])
         self.EOS = self.sp.eos_token_id
-        # get_vocab = self.sp.get_vocab()
-        # print(len(get_vocab))
-        # print(get_vocab)
-        # exit(1)
-        print("Done!")
 
         # load bmodel
         # 这里devio，后面都没有创建系统内存的tensor
         self.net = sail.Engine(bmodel_path, dev_id, sail.IOMode.DEVIO)
+        logging.info("load {} success!".format(bmodel_path))
         self.handle = sail.Handle(dev_id)
         self.graph_names = self.net.get_graph_names()
 
@@ -147,7 +145,6 @@ class Chatglm3:
 
     def forward_first(self, token):
         # Keep
-        # print("history length: ",len(token))
         input_ids = np.zeros(self.SEQLEN, type_convert(self.first_embed_input["dtype"]))
         input_ids[:min(self.SEQLEN, len(token))] = token
         self.token_length = len(token)
@@ -245,13 +242,11 @@ class Chatglm3:
 
     def build_prompt(self, query, history):
         prompt = []
-        # prompt += self.system
         # import pdb; pdb.set_trace()
         for i in range(0, len(history)):
             prompt.extend([{"role":"user", "content":history[i][0]},
                                  {"role":"assistant", "content":history[i][1]}])
         prompt = self.system + prompt
-        # print("prompt:", prompt)
         prompt = self.sp.build_chat_input(query, history=prompt, role="user")
         return prompt
 
@@ -264,10 +259,10 @@ class Chatglm3:
         tokens = prompt
         # input is empty
         if not tokens:
-            print("Sorry: your question is too wierd!!")
+            logging.error("Sorry: your question is too wierd!!")
             return
         if len(tokens) > self.SEQLEN:
-            print("The maximum question length should be shorter than {} but we get {} instead, \
+            logging.warning("The maximum question length should be shorter than {} but we get {} instead, \
                 history will be cleared, please ask again".format(self.SEQLEN, len(tokens)))
             self.history.clear()
             return

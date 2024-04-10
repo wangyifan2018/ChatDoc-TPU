@@ -17,13 +17,12 @@ from langchain.document_loaders import UnstructuredPowerPointLoader, Unstructure
     UnstructuredPDFLoader, UnstructuredFileLoader
 import logging
 import pickle
-from langchain.embeddings import HuggingFaceEmbeddings
-from embedding_tpu.embedding import Word2VecEmbedding
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from typing import List
 from glob import glob
 from tqdm import tqdm
 
+from embedding import Word2VecEmbedding
 from .chatglm3.chatglm3 import Chatglm3
 from .qwen.qwen import Qwen
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -31,12 +30,6 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=lo
 
 class DocChatbot:
     _instance = None
-
-    embeding_tpye = os.getenv("EMBEDDING_TYPE")
-    if embeding_tpye == "cpu":
-        db_base_path = "data/db"
-    else:
-        db_base_path = "data/db_tpu"
 
     def __init__(self) -> None:
         self.llm = None
@@ -52,14 +45,11 @@ class DocChatbot:
         self.vector_db = None
         self.string_db = None
         self.files = None
-        embeding_tpye = os.getenv("EMBEDDING_TYPE")
-        if embeding_tpye == "cpu":
-            self.embeddings_size = 768
-            self.embeddings = HuggingFaceEmbeddings(model_name="./embedding")
-        else:
-            self.embeddings_size = 1024
-            self.embeddings = Word2VecEmbedding()
-        print("chatbot init success!")
+
+        self.db_base_path = "data/db_tpu"
+        self.embeddings_size = 1024
+        self.embeddings = Word2VecEmbedding()
+        logging.info("chatbot init success!")
 
     def docs2embedding(self, docs):
         emb = []
@@ -97,29 +87,30 @@ class DocChatbot:
             doc = text_splitter.split_documents(doc)
             docs.extend(doc)
 
-        # print([(len(x.page_content), count_chinese_chars(x.page_content)) for x in docs])
-        # for item in docs:
-        #     if len(item.page_content) / count_chinese_chars(item.page_content) > 1.5:
-        #         print(len(item.page_content), item.page_content)
-
         # 文件解析失败
         if len(docs) == 0:
             return False
 
+        emb_num = 0
+        start_time = time.time()
         if self.vector_db is None:
             self.files = ", ".join([item.split("/")[-1] for item in file_list])
             emb = self.docs2embedding([x.page_content for x in docs])
             emb = np.array(emb).astype(np.float32)
             if not emb.flags['C_CONTIGUOUS']:
                 emb = np.ascontiguousarray(emb)
+            emb_num = len(emb)
             self.vector_db = faiss.IndexFlatL2(self.embeddings_size)
             self.vector_db.add(emb)
             self.string_db = docs
         else:
             self.files = self.files + ", " + ", ".join([item.split("/")[-1] for item in file_list])
             emb = self.docs2embedding([x.page_content for x in docs])
+            emb_num = len(emb)
             self.vector_db.add(np.array(emb))
             self.string_db += docs
+
+        logging.info("Total embedding docs time {}, embedding vector size {}, embedding vector num {}".format(time.time()- start_time, self.embeddings_size, emb_num))
         return True
 
     def load_vector_db_from_local(self, index_name: str):

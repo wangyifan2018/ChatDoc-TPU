@@ -102,7 +102,7 @@ pip install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
 
 ## 项目结构树
 ```
-|-- chatdoc
+|-- ChatDoc-TPU
     |-- data
         |-- db_tpu        -- 知识库持久化目录
         |-- uploaded      -- 已上传文件目录
@@ -135,6 +135,8 @@ pip install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
 
 - 在 `config.ini` 中设置默认模型地址、dev_id
 - 默认 dev_id=0，需要修改为 BM1684X 设备的 dev_id
+
+默认使用 2k seq_len 模型，如果需要其他参数的模型，可参考[ChatGLM3模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/docs/ChatGLM3_Export_Guide.md)和[Qwen模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/Qwen/docs/Qwen_Export_Guide.md)
 
 ## 操作说明
 
