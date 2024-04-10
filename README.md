@@ -114,9 +114,9 @@ pip install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
         |-- chatbot.py    -- ChatDoc业务逻辑脚本
         |-- charglm3      -- charglm3 代码
         |-- qwen          -- qwen 代码
-        |-- api.py        -- API服务脚本
     |-- embedding_tpu     -- 文本嵌入模型TPU版本
     |-- static            -- README中图片文件
+    |-- api.py            -- API服务脚本
     |-- README.md         -- README
     |-- config.ini        -- 推理模型配置文件
     |-- requirements.txt  -- 项目依赖
@@ -137,6 +137,11 @@ pip install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
 - 默认 dev_id=0，需要修改为 BM1684X 设备的 dev_id
 
 默认使用 2k seq_len 模型，如果需要其他参数的模型，可参考[ChatGLM3模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/docs/ChatGLM3_Export_Guide.md)和[Qwen模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/Qwen/docs/Qwen_Export_Guide.md)
+
+如果您只想启动以后后端api接口，可以在下载完毕模型之后，运行
+```bash
+python api.py
+```
 
 ## 操作说明
 
