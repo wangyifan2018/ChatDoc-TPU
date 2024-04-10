@@ -24,7 +24,7 @@ class Qwen:
         token_path = config.get('qwen_model', 'token_path')
         dev_id = int(config.get('qwen_model', 'dev_id'))
         self.input_str = ""
-        self.system_prompt = "You are a helpful assistant."
+        self.system_prompt = "You are QWEN, a large language model. Follow the user's instructions carefully. Respond using markdown."
         self.history = []
 
         # load tokenizer

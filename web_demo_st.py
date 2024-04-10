@@ -183,7 +183,7 @@ if user_input := st.chat_input():
 
             docs = chatbot_st.query_from_doc(user_input, 3)
             refer = "\n".join([x.page_content.replace("\n", '\t') for x in docs])
-            PROMPT = """{}\n请根据下面的参考文档回答上述问题。\n{}\n"""
+            PROMPT = """{}\n现在你是一个本地知识库问答助手，请根据下面的参考文档回答上述问题。\n{}\n"""
             prompt = PROMPT.format(user_input, refer)
 
             # for result_answer, _ in stream_predict(user_input, []):
