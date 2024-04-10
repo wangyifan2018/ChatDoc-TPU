@@ -1,6 +1,27 @@
-# ChatDoc-TPU
+# ChatDoc-TPU <!-- omit in toc -->
 
 这个项目是基于 Sophgo TPU 实现的文档对话工具。项目可在 BM1684X 上独立部署运行。
+
+- [介绍](#介绍)
+- [特点](#特点)
+- [安装](#安装)
+  - [克隆代码:](#克隆代码)
+  - [进入项目路径:](#进入项目路径)
+  - [安装第三方库](#安装第三方库)
+  - [安装sail](#安装sail)
+    - [x86/arm PCIe平台](#x86arm-pcie平台)
+    - [SoC平台](#soc平台)
+- [项目结构树](#项目结构树)
+- [启动](#启动)
+- [操作说明](#操作说明)
+  - [界面简介](#界面简介)
+  - [上传文档](#上传文档)
+  - [持久化知识库](#持久化知识库)
+  - [导入知识库](#导入知识库)
+  - [删除知识库](#删除知识库)
+  - [重命名知识库](#重命名知识库)
+  - [清楚聊天记录](#清楚聊天记录)
+  - [移除选中文档](#移除选中文档)
 
 
 ## 介绍
@@ -20,21 +41,59 @@
 
 按照以下步骤，可以将这个项目部署到SophGo的设备上
 
-1. 克隆代码:
+### 克隆代码:
 ```bash
 git clone https://github.com/wangyifan2018/ChatDoc-TPU.git
 ```
-2. 进入项目路径:
+### 进入项目路径:
 ```bash
 cd ChatDoc-TPU
 ```
-3. 安装依赖
+### 安装第三方库
 ```bash
 # 考虑到 langchain 和 sail 版本依赖，推荐在 python>=3.9 环境运行
 # 已在 python==3.9 环境测试通过
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
-**此外还依赖新版本sail**，安装方法可参考[sail安装](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/python/README.md#1-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87)
+### 安装sail
+#### x86/arm PCIe平台
+
+如果您在x86/arm平台安装了PCIe加速卡（如SC系列加速卡），并使用它测试本例程，您需要安装libsophon，具体请参考[x86-pcie平台的开发和运行环境搭建](./docs/Environment_Install_Guide.md#3-x86-pcie平台的开发和运行环境搭建)或[arm-pcie平台的开发和运行环境搭建](./docs/Environment_Install_Guide.md#5-arm-pcie平台的开发和运行环境搭建)。
+
+Sail的安装可以参考[sophon-sail编译安装指南](https://doc.sophgo.com/sdk-docs/v23.07.01/docs_latest_release/docs/sophon-sail/docs/zh/html/1_build.html#)自己编译sophon-sail。
+```bash
+python3 -m dfss --url=open@sophgo.com:sophon-demo/ChatGLM3/sail/sophon-sail_20240226.tar.gz
+tar xvf sophon-sail_20240226.tar.gz
+```
+下载SOPHON-SAIL源码,解压后进入其源码目录，编译不包含bmcv,sophon-ffmpeg,sophon-opencv的SAIL, 通过此方式编译出来的SAIL无法使用其Decoder、Bmcv等多媒体相关接口。
+
+创建编译文件夹build,并进入build文件夹
+```bash
+mkdir build && cd build
+```
+执行编译命令
+
+```bash
+cmake -DONLY_RUNTIME=ON ..
+make pysail
+```
+打包生成python wheel,生成的wheel包的路径为‘python/pcie/dist’,文件名为‘sophon-3.7.0-py3-none-any.whl’
+```bash
+cd ../python/pcie
+chmod +x sophon_pcie_whl.sh
+./sophon_pcie_whl.sh
+```
+安装python wheel
+
+```bash
+pip install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
+```
+
+#### SoC平台
+
+如果您使用SoC平台（如SE、SM系列边缘设备），并使用它测试本例程，刷机后在`/opt/sophon/`下已经预装了相应的libsophon、sophon-opencv和sophon-ffmpeg运行库包。
+
+如果您需要其他版本的sophon-sail，可以参考上一小节，下载源码自己编译，参考[sail交叉编译方法](https://doc.sophgo.com/sdk-docs/v23.07.01/docs_latest_release/docs/sophon-sail/docs/zh/html/1_build.html#id5)。
 
 
 ## 项目结构树
