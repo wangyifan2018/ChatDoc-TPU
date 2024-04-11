@@ -20,19 +20,18 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=lo
 
 
 class Qwen:
-    def __init__(self):
+    def __init__(self, dev_id = 0):
         config = configparser.ConfigParser()
         config.read('config.ini')
         bmodel_path = config.get('qwen_model', 'bmodel_path')
         token_path = config.get('qwen_model', 'token_path')
-        dev_id = int(config.get('qwen_model', 'dev_id'))
         self.input_str = ""
         self.system_prompt = "You are QWEN, a large language model. Follow the user's instructions carefully."
         self.history = []
 
         # load tokenizer
         self.sp = AutoTokenizer.from_pretrained(token_path, trust_remote_code=True)
-        logging.info("load {} success!".format(token_path))
+        logging.info("load {} success, dev_id {}".format(bmodel_path, dev_id))
         # warm up
         self.sp.decode([0])
         self.EOS = self.sp.im_end_id

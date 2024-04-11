@@ -35,10 +35,15 @@ class DocChatbot:
         self.llm = None
 
         llm_model = os.getenv("LLM_MODEL")
+        dev_id = 0
+        if os.getenv("DEVICE_ID"):
+            dev_id = int(os.getenv("DEVICE_ID"))
+        else:
+            logging.warning("DEVICE_ID is empty in env var, use default {}".format(dev_id))
         if llm_model == "chatglm3":
-            self.llm = Chatglm3()
+            self.llm = Chatglm3(dev_id)
         elif llm_model == "qwen":
-            self.llm = Qwen()
+            self.llm = Qwen(dev_id)
         else:
             logging.error("llm_model error: {}".format(llm_model))
 

@@ -14,7 +14,7 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=lo
 class EngineOV:
     def __init__(self, model_path="./models/bert_model/bge_large_512_fp16.bmodel", device_id=0) :
         self.net = sail.Engine(model_path, device_id, sail.IOMode.SYSIO)
-        logging.info("Load {} ...".format(model_path))
+        logging.info("load {} success, dev_id {}".format(model_path, device_id))
         self.graph_name = self.net.get_graph_names()[0]
         self.input_names = self.net.get_input_names(self.graph_name)
         self.output_names = self.net.get_output_names(self.graph_name)
