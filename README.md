@@ -84,14 +84,23 @@ sail安装方法可参考[Sail_Install_Guide](./docs/Sail_Install_Guide.md)
 
 回到`ChatDoc-TPU`主目录，启动程序，模型和配置文件自动下载，使用默认路径
 
-| Model           | Cmd                                      |
-| :-------------- | :----------------------------------------|
-| ChatGLM3-6B     | bash ./run.sh --model chatglm3 --dev_id 0 |
-| Qwen-7B         | bash ./run.sh --model qwen --dev_id 0     |
+| Model           | Cmd                                  |
+| :-------------- | :------------------------------------|
+| ChatGLM3-6B     | ./run.sh --model chatglm3 --dev_id 0 |
+| Qwen-7B         | ./run.sh --model qwen --dev_id 0     |
 
-- 在 `config.ini` 中可修改模型路径，默认使用int4模型
-- dev_id 需设置为 BM1684X 设备id
-- 默认使用 2k seq_len 模型，如果需要其他参数的模型，可参考[ChatGLM3模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/docs/ChatGLM3_Export_Guide.md)和[Qwen模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/Qwen/docs/Qwen_Export_Guide.md)
+```bash
+usage: ./run.sh [--model MODEL]  [--dev_id DEV_ID] [--server_address SERVER_ADDRESS] [--server_port SERVER_PORT]
+--model: 选择模型，可选项为 chatglm3/qwen。默认为 "chatglm3"。
+--dev_id: 用于推理的 TPU 设备 ID。默认为 0。
+--server_address: web server 地址。默认为 "0.0.0.0"。
+--server_port：web sever 端口。如不设置，从 8501 起自动分配。
+```
+
+> **说明**：
+>1. 在 `config.ini` 中可修改模型路径，默认使用int4模型
+>2. dev_id 需设置为 BM1684X 设备id
+>3. 默认使用 2k seq_len 模型，如果需要其他参数的模型，可参考[ChatGLM3模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/docs/ChatGLM3_Export_Guide.md)和[Qwen模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/Qwen/docs/Qwen_Export_Guide.md)
 
 ## 操作说明
 
