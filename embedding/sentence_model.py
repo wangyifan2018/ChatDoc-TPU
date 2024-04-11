@@ -14,8 +14,11 @@ import torch
 from tqdm.autonotebook import trange
 from transformers import AutoTokenizer
 import configparser
+import logging
+import os
 
 from .npuengine import EngineOV
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
 class EncoderType(Enum):
@@ -62,7 +65,11 @@ class SentenceModel:
         config.read('config.ini')
         bmodel_path = config.get('bert_model', 'bmodel_path')
         token_path = config.get('bert_model', 'token_path')
-        dev_id = int(config.get('bert_model', 'dev_id'))
+        dev_id = 0
+        if os.getenv("DEVICE_ID"):
+            dev_id = int(os.getenv("DEVICE_ID"))
+        else:
+            logging.warning("DEVICE_ID is empty in env var, use default {}".format(dev_id))
         self.model_name_or_path = model_name_or_path
         encoder_type = EncoderType.from_string(encoder_type) if isinstance(encoder_type, str) else encoder_type
         if encoder_type not in list(EncoderType):
@@ -71,7 +78,6 @@ class SentenceModel:
         self.max_seq_length = max_seq_length
         self.tokenizer = AutoTokenizer.from_pretrained(token_path)
 
-        self.device = 'tpu'
         self.bert = EngineOV(model_path=bmodel_path,
                                 device_id=dev_id)
         self.bert.padding_to = 512

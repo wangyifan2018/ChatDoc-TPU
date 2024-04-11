@@ -5,7 +5,7 @@
 - [介绍](#介绍)
 - [特点](#特点)
 - [安装](#安装)
-  - [克隆代码:](#克隆代码)
+  - [克隆代码](#克隆代码)
   - [安装第三方库](#安装第三方库)
   - [安装sail](#安装sail)
 - [项目结构树](#项目结构树)
@@ -40,7 +40,7 @@
 
 按照以下步骤，可以将这个项目部署到SophGo的设备上
 
-### 克隆代码:
+### 克隆代码
 ```bash
 git clone https://github.com/wangyifan2018/ChatDoc-TPU.git
 cd ChatDoc-TPU
@@ -81,17 +81,16 @@ sail安装方法可参考[Sail_Install_Guide](./docs/Sail_Install_Guide.md)
 
 ## 启动
 
-回到`ChatDoc-TPU`主目录，启动程序，模型和配置文件自动下载
+回到`ChatDoc-TPU`主目录，启动程序，模型和配置文件自动下载，使用默认路径
 
-| Model           | SoC                                |
-| :-------------- | :--------------------------------- |
-| ChatGLM3-6B     | bash ./run.sh --model chatglm3     |
-| Qwen-7B         | bash ./run.sh --model qwen         |
+| Model           | Cmd                                      |
+| :-------------- | :----------------------------------------|
+| ChatGLM3-6B     | bash ./run.sh --model chatglm3 --dev_id 0 |
+| Qwen-7B         | bash ./run.sh --model qwen --dev_id 0     |
 
-- 在 `config.ini` 中设置默认模型地址、dev_id
-- 默认 dev_id=0，需要修改为 BM1684X 设备的 dev_id
-
-默认使用 2k seq_len 模型，如果需要其他参数的模型，可参考[ChatGLM3模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/docs/ChatGLM3_Export_Guide.md)和[Qwen模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/Qwen/docs/Qwen_Export_Guide.md)
+- 在 `config.ini` 中可修改模型路径，默认使用int4模型
+- dev_id 需设置为 BM1684X 设备id
+- 默认使用 2k seq_len 模型，如果需要其他参数的模型，可参考[ChatGLM3模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/docs/ChatGLM3_Export_Guide.md)和[Qwen模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/Qwen/docs/Qwen_Export_Guide.md)
 
 ## 操作说明
 

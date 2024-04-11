@@ -19,12 +19,11 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=lo
 
 
 class Chatglm3:
-    def __init__(self):
+    def __init__(self, dev_id=0):
         config = configparser.ConfigParser()
         config.read('config.ini')
         bmodel_path = config.get('glm3_model', 'bmodel_path')
         token_path = config.get('glm3_model', 'token_path')
-        dev_id = int(config.get('glm3_model', 'dev_id'))
         # load tokenizer
         self.input_str = ""
         self.system = [{"role":"system",
@@ -39,7 +38,7 @@ class Chatglm3:
         # load bmodel
         # 这里devio，后面都没有创建系统内存的tensor
         self.net = sail.Engine(bmodel_path, dev_id, sail.IOMode.DEVIO)
-        logging.info("load {} success!".format(bmodel_path))
+        logging.info("load {} success, dev_id {}".format(bmodel_path, dev_id))
         self.handle = sail.Handle(dev_id)
         self.graph_names = self.net.get_graph_names()
 

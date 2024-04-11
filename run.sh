@@ -11,9 +11,9 @@ fi
 
 pip install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
 
-# default LLM
+# default param
 llm_model="chatglm3"
-
+dev_id="0"
 # Args
 parse_args() {
     while [[ $# -gt 0 ]]; do
@@ -22,6 +22,10 @@ parse_args() {
         case $key in
             --model)
                 llm_model="$2"
+                shift 2
+                ;;
+            --dev_id)
+                dev_id="$2"
                 shift 2
                 ;;
             *)
@@ -91,5 +95,6 @@ fi
 
 
 export LLM_MODEL=$llm_model
+export DEVICE_ID=$dev_id
 
 streamlit run web_demo_st.py --server.address '0.0.0.0'
