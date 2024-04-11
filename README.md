@@ -70,7 +70,8 @@ sail安装方法可参考[Sail_Install_Guide](./docs/Sail_Install_Guide.md)
         |-- chatbot.py    -- ChatDoc业务逻辑脚本
         |-- charglm3      -- charglm3 代码
         |-- qwen          -- qwen 代码
-    |-- embedding_tpu     -- 文本嵌入模型TPU版本
+    |-- embedding         -- 文本嵌入模型
+    |-- docs              -- 环境安装文档
     |-- static            -- README中图片文件
     |-- README.md         -- README
     |-- config.ini        -- 推理模型配置文件
