@@ -14,6 +14,9 @@ pip install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
 # default param
 llm_model="chatglm3"
 dev_id="0"
+server_address="0.0.0.0"
+server_port=""
+
 # Args
 parse_args() {
     while [[ $# -gt 0 ]]; do
@@ -26,6 +29,14 @@ parse_args() {
                 ;;
             --dev_id)
                 dev_id="$2"
+                shift 2
+                ;;
+            --server_address)
+                server_address="$2"
+                shift 2
+                ;;
+            --server_port)
+                server_port="$2"
                 shift 2
                 ;;
             *)
@@ -97,4 +108,9 @@ fi
 export LLM_MODEL=$llm_model
 export DEVICE_ID=$dev_id
 
-streamlit run web_demo_st.py --server.address '0.0.0.0'
+if [ "$server_port" == "" ]; then
+    # auto server port
+    streamlit run web_demo_st.py --server.address $server_address
+else
+    streamlit run web_demo_st.py --server.address $server_address --server.port $server_port
+fi
