@@ -3,9 +3,13 @@ from chat import DocChatbot
 
 app = Flask(__name__)
 chatbot_st = DocChatbot.get_instance()
+
+# if you have local db, load it
 chatbot_st.load_first_vector_db()
+
 app.config['JSON_AS_ASCII'] = False
 
+# export LLM_MODEL="qwen"
 
 @app.route("/chatdoc", methods=['POST'])
 def chatdoc():

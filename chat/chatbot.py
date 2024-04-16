@@ -40,7 +40,8 @@ class DocChatbot:
         elif llm_model == "qwen":
             self.llm = Qwen()
         else:
-            logging.error("llm_model error: {}".format(llm_model))
+            logging.warning("llm_model empty, use Qwen: {}".format(llm_model))
+            self.llm = Qwen()
 
         self.vector_db = None
         self.string_db = None
