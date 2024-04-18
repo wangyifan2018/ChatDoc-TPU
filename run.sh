@@ -9,7 +9,7 @@ then
     exit
 fi
 
-pip install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
+pip3 install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
 
 # default param
 llm_model="chatglm3"
@@ -82,9 +82,9 @@ fi
 if [ "$llm_model" == "chatglm3" ]; then
     if [ ! -d "./models/glm3_model" ]; then
         echo "./models/glm3_model does not exist, download..."
-        python3 -m dfss --url=open@sophgo.com:ezoo/chatdoc/glm3_model.zip
-        unzip glm3_model.zip -d ./models
-        rm glm3_model.zip
+        python3 -m dfss --url=open@sophgo.com:ezoo/chatdoc/glm3_model.tar.gz
+        tar -zxvf glm3_model.tar.gz -C ./models
+        rm glm3_model.tar.gz
         echo "glm3_model download!"
     else
         echo "./models/glm3_model already exist..."
@@ -92,9 +92,9 @@ if [ "$llm_model" == "chatglm3" ]; then
 elif [ "$llm_model" == "qwen" ]; then
     if [ ! -d "./models/qwen_model" ]; then
         echo "./models/qwen_model does not exist, download...."
-        python3 -m dfss --url=open@sophgo.com:ezoo/chatdoc/qwen_model.zip
-        unzip qwen_model.zip -d ./models
-        rm qwen_model.zip
+        python3 -m dfss --url=open@sophgo.com:ezoo/chatdoc/qwen_model.tar.gz
+        tar -zxvf qwen_model.tar.gz -C ./models
+        rm qwen_model.tar.gz
         echo "qwen_model download!"
     else
         echo "./models/qwen_model already exist..."

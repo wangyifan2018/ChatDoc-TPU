@@ -50,11 +50,11 @@ cd ChatDoc-TPU
 ```bash
 # 考虑到 langchain 和 sail 版本依赖，推荐在 python>=3.9 环境运行
 # 已在 python==3.9 环境测试通过
-pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 ### 安装sail
 
-sail安装方法可参考[Sail_Install_Guide](./docs/Sail_Install_Guide.md)
+此例程`依赖新版本sail`，安装方法请参考[Sail_Install_Guide](./docs/Sail_Install_Guide.md)
 
 ## 项目结构树
 ```

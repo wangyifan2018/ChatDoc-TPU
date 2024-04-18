@@ -6,7 +6,7 @@
 
 更详细的Sail的安装可以参考[sophon-sail编译安装指南](https://doc.sophgo.com/sdk-docs/v23.07.01/docs_latest_release/docs/sophon-sail/docs/zh/html/1_build.html#)。
 
-通常情况下，在运行环境通过源码编译sail不会有`python或者驱动版本依赖`问题，PCIe环境下推荐源码编译安装。
+通常情况下，在运行环境通过源码编译sail不会有`python或者驱动版本依赖`问题，PCIe环境下推荐源码编译安装。Soc环境下python版本较为固定，建议使用预编译的whl包安装。
 
 - [源码编译安装](#源码编译安装)
   - [x86/arm PCIe平台](#x86arm-pcie平台)
