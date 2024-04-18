@@ -28,3 +28,4 @@ models/
 
 sophon-sail/
 python_wheels/
+*.whl

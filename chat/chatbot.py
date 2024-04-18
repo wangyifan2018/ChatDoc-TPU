@@ -45,13 +45,15 @@ class DocChatbot:
         elif llm_model == "qwen":
             self.llm = Qwen(dev_id)
         else:
-            logging.error("llm_model error: {}".format(llm_model))
+            self.llm = Chatglm3(dev_id)
+            logging.warning("llm_model env var empty, use default chatglm3")
 
         self.vector_db = None
         self.string_db = None
         self.files = None
 
         self.db_base_path = "data/db_tpu"
+        # embeddings_size hard code here, can read from model output size
         self.embeddings_size = 1024
         self.embeddings = Word2VecEmbedding()
         logging.info("chatbot init success!")

@@ -6,7 +6,9 @@
 
 更详细的Sail的安装可以参考[sophon-sail编译安装指南](https://doc.sophgo.com/sdk-docs/v23.07.01/docs_latest_release/docs/sophon-sail/docs/zh/html/1_build.html#)。
 
-通常情况下，在运行环境通过源码编译sail不会有`python或者驱动版本依赖`问题，PCIe环境下推荐源码编译安装。Soc环境下python版本较为固定，建议使用预编译的whl包安装。
+通常情况下，在运行环境通过源码编译sail不会有`python或者驱动版本依赖`问题，PCIe环境下推荐[源码编译安装](#源码编译安装)。Soc环境下python版本较为固定，建议使用[预编译的whl包安装](#预编译的whl包安装)。
+
+此例程无需安装sophon-mw，源码编译时可设置`-DONLY_RUNTIME=ON`。
 
 - [源码编译安装](#源码编译安装)
   - [x86/arm PCIe平台](#x86arm-pcie平台)
@@ -20,7 +22,7 @@
 
 下载SOPHON-SAIL源码,解压后进入其源码目录，编译`不包含bmcv,sophon-ffmpeg,sophon-opencv`的SAIL, 通过此方式编译出来的SAIL无法使用其Decoder、Bmcv等多媒体相关接口。
 ```bash
-pip install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
+pip3 install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
 python3 -m dfss --url=open@sophgo.com:sophon-demo/ChatGLM3/sail/sophon-sail_20240226.tar.gz
 tar xvf sophon-sail_20240226.tar.gz
 ```
@@ -45,7 +47,7 @@ chmod +x sophon_pcie_whl.sh
 安装python wheel
 
 ```bash
-pip install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
+pip3 install ./dist/sophon-3.7.0-py3-none-any.whl --force-reinstall
 ```
 
 ### SoC平台
@@ -82,14 +84,21 @@ chmod +x sophon_soc_whl.sh
 
 将‘sophon_arm-3.7.0-py3-none-any.whl’拷贝到目标SOC上,然后执行如下安装命令
 ```bash
-pip install sophon_arm-3.7.0-py3-none-any.whl --force-reinstall
+pip3 install sophon_arm-3.7.0-py3-none-any.whl --force-reinstall
 ```
 
 ## 预编译的whl包安装
 
-以下提供了在不同版本python、libsophon、sophon-mw下预编译好的whl包，用户可根据自己的机器环境选择安装。可通过`ls /opt/sophon`查看运行环境各sdk版本
+目前大多设备python版本为3.8.2，可直接下载此whl包
+
 ```bash
-pip install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
+pip3 install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
+python3 -m dfss --url=open@sophgo.com:sophon-demo/ChatGLM3/sail/soc/sophon_arm-3.7.0-py3-none-any.whl
+```
+
+下面提供了在不同版本python、libsophon、sophon-mw下预编译好的whl包，用户可根据自己的机器环境选择安装。可通过`ls /opt/sophon`查看运行环境各sdk版本
+```bash
+pip3 install dfss -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade
 python3 -m dfss --url=open@sophgo.com:ezoo/chatdoc/python_wheels.zip
 unzip python_wheels.zip
 ```
@@ -200,5 +209,5 @@ python_wheels
 
 选择适合运行环境的版本安装，例如
 ```bash
-pip install sophon_arm-3.7.0-py3-none-any.whl --force-reinstall
+pip3 install sophon_arm-3.7.0-py3-none-any.whl --force-reinstall
 ```

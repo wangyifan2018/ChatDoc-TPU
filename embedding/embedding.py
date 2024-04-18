@@ -13,7 +13,7 @@ from .sentence_model import SentenceModel
 
 
 class Word2VecEmbedding(Embeddings):
-    model = SentenceModel(device='tpu')
+    model = SentenceModel()
 
     def embed_query(self, text: str) -> List[float]:
         embeddings_tpu = self.model.encode_tpu([text, "", "", ""])

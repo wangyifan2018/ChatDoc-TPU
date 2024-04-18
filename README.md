@@ -48,13 +48,12 @@ cd ChatDoc-TPU
 
 ### 安装第三方库
 ```bash
-# 考虑到 langchain 和 sail 版本依赖，推荐在 python>=3.9 环境运行
-# 已在 python==3.9 环境测试通过
+# 考虑到 langchain 和 sail 版本依赖，推荐在 python>=3.8 环境运行
 pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 ### 安装sail
 
-此例程`依赖新版本sail`，安装方法请参考[Sail_Install_Guide](./docs/Sail_Install_Guide.md)
+此例程`依赖新版本sail`，旧版本需要更新，安装方法请参考[Sail_Install_Guide](./docs/Sail_Install_Guide.md)
 
 ## 项目结构树
 ```
@@ -96,6 +95,8 @@ usage: ./run.sh [--model MODEL]  [--dev_id DEV_ID] [--server_address SERVER_ADDR
 --server_address: web server 地址。默认为 "0.0.0.0"。
 --server_port：web sever 端口。如不设置，从 8501 起自动分配。
 ```
+
+启动后您可以通过浏览器打开，`URL: http://{host_ip}:8501`，host_ip为启动ChatDoc的设备IP，或者您通过参数设置的`server_address`
 
 > **说明**：
 >1. 在 `config.ini` 中可修改模型路径，默认使用int4模型
