@@ -102,7 +102,7 @@ usage: ./run.sh [--model MODEL]  [--dev_id DEV_ID] [--server_address SERVER_ADDR
 >1. 在 `config.ini` 中可修改模型路径，默认使用int4模型
 >2. dev_id 需设置为 BM1684X 设备id
 >3. 默认使用 2k seq_len 模型，如果需要其他参数的模型，可参考[ChatGLM3模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/ChatGLM3/docs/ChatGLM3_Export_Guide.md)和[Qwen模型导出与编译](https://github.com/sophgo/sophon-demo/blob/release/sample/Qwen/docs/Qwen_Export_Guide.md)
->4. embedding 模型默认使用 [shibing624/text2vec-bge-large-chinese](shibing624/text2vec-bge-large-chinese)，导出模型方法可参考 [export_onnx.py](./scripts/export_onnx.py)
+>4. embedding 模型默认使用 [shibing624/text2vec-bge-large-chinese](https://huggingface.co/shibing624/text2vec-bge-large-chinese)，导出模型方法可参考 [export_onnx.py](./scripts/export_onnx.py)
 
 ## 操作说明
 
