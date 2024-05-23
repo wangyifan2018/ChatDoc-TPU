@@ -5,7 +5,6 @@
 - [介绍](#介绍)
 - [特点](#特点)
 - [安装](#安装)
-  - [克隆代码](#克隆代码)
   - [安装第三方库](#安装第三方库)
   - [安装sail](#安装sail)
 - [项目结构树](#项目结构树)
@@ -40,14 +39,9 @@
 
 按照以下步骤，可以将这个项目部署到SophGo的设备上
 
-### 克隆代码
-```bash
-git clone https://github.com/wangyifan2018/ChatDoc-TPU.git
-cd ChatDoc-TPU
-```
-
 ### 安装第三方库
 ```bash
+cd ChatDoc-TPU
 # 考虑到 langchain 和 sail 版本依赖，推荐在 python>=3.8 环境运行
 pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
