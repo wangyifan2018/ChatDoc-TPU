@@ -25,7 +25,7 @@
 
 该项目的主要目标是通过使用自然语言来简化与文档的交互，并提取有价值的信息。此项目使用LangChain、[ChatGLM3-TPU](https://github.com/sophgo/sophon-demo/tree/release/sample/ChatGLM3)或[QWEN-TPU](https://github.com/sophgo/sophon-demo/tree/release/sample/Qwen)构建，以向用户提供流畅自然的对话体验。
 
-以 ChatGPT 为例（可替换为其他LLM，本仓库已支持 Chatglm3 和 Qwen，需要保证接口一致），本地知识库问答流程如下：
+以 ChatGPT 为例（可替换为其他LLM，本仓库已支持 Chatglm3-6B 和 Qwen-7B，需要保证接口一致），本地知识库问答流程如下：
 ![Flow](<./static/embedding.png>)
 
 ## 特点
