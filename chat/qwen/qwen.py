@@ -23,8 +23,8 @@ class Qwen:
     def __init__(self, dev_id = 0):
         config = configparser.ConfigParser()
         config.read('config.ini')
-        bmodel_path = config.get('qwen_model', 'bmodel_path')
-        token_path = config.get('qwen_model', 'token_path')
+        bmodel_path = config.get('qwen7b', 'bmodel_path')
+        token_path = config.get('qwen7b', 'token_path')
         self.input_str = ""
         self.system_prompt = "You are QWEN, a large language model. Follow the user's instructions carefully."
         self.history = []

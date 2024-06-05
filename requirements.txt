@@ -9,5 +9,7 @@ torch==2.0.1
 tqdm==4.66.1
 transformers==4.27.1
 unstructured==0.7.1
+rapidocr_onnxruntime==1.3.8
+PyMuPDF==1.23.16
 pdf2image
 tabulate

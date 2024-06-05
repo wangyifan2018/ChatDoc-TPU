@@ -22,8 +22,8 @@ class Chatglm3:
     def __init__(self, dev_id=0):
         config = configparser.ConfigParser()
         config.read('config.ini')
-        bmodel_path = config.get('glm3_model', 'bmodel_path')
-        token_path = config.get('glm3_model', 'token_path')
+        bmodel_path = config.get('chatglm3', 'bmodel_path')
+        token_path = config.get('chatglm3', 'token_path')
         # load tokenizer
         self.input_str = ""
         self.system = [{"role":"system",

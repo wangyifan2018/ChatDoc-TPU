@@ -25,6 +25,9 @@ from tqdm import tqdm
 from embedding import Word2VecEmbedding
 from .chatglm3.chatglm3 import Chatglm3
 from .qwen.qwen import Qwen
+import doc_processor
+from doc_processor.knowledge_file import KnowledgeFile
+
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
@@ -42,7 +45,7 @@ class DocChatbot:
             logging.warning("DEVICE_ID is empty in env var, use default {}".format(dev_id))
         if llm_model == "chatglm3":
             self.llm = Chatglm3(dev_id)
-        elif llm_model == "qwen":
+        elif llm_model == "qwen7b":
             self.llm = Qwen(dev_id)
         else:
             self.llm = Chatglm3(dev_id)
@@ -75,23 +78,10 @@ class DocChatbot:
 
     # split documents, generate embeddings and ingest to vector db
     def init_vector_db_from_documents(self, file_list: List[str]):
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=325, chunk_overlap=6,
-                                                       separators=["\n\n", "\n", "。", "！", "，", " ", ""])
         docs = []
         for file in file_list:
-            ext_name = os.path.splitext(file)[-1]
-            if ext_name == ".pptx":
-                loader = UnstructuredPowerPointLoader(file)
-            elif ext_name == ".docx":
-                loader = UnstructuredWordDocumentLoader(file)
-            elif ext_name == ".pdf":
-                loader = UnstructuredPDFLoader(file)
-            else:
-                loader = UnstructuredFileLoader(file)
-
-            doc = loader.load()
-            doc[0].page_content = self.filter_space(doc[0].page_content)
-            doc = text_splitter.split_documents(doc)
+            kb_file = KnowledgeFile(filename=file)
+            doc = kb_file.docs2texts()
             docs.extend(doc)
 
         # 文件解析失败

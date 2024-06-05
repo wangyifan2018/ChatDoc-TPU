@@ -6,7 +6,9 @@ import time
 import sys
 import logging
 sys.path.append(".")
+sys.path.append(os.path.join(os.path.dirname(__file__), 'doc_processor'))
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+
 
 @st.cache_resource
 def load_model():
@@ -47,7 +49,7 @@ with st.sidebar:
     st.title("💬 ChatDoc-TPU")
     st.write("上传一个文档，然后与我对话.")
     with st.form("Upload and Process", True):
-        uploaded_file = st.file_uploader("上传文档", type=["pdf", "txt", "docx"], accept_multiple_files=True,
+        uploaded_file = st.file_uploader("上传文档", type=None, accept_multiple_files=True, help = "目前支持多种文件格式，包括pdf、ppt、html、图片、表格等"
                                          )
 
         option = st.selectbox(

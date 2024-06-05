@@ -89,7 +89,7 @@ if [ "$llm_model" == "chatglm3" ]; then
     else
         echo "./models/glm3_model already exist..."
     fi
-elif [ "$llm_model" == "qwen" ]; then
+elif [ "$llm_model" == "qwen7b" ]; then
     if [ ! -d "./models/qwen_model" ]; then
         echo "./models/qwen_model does not exist, download...."
         python3 -m dfss --url=open@sophgo.com:ezoo/chatdoc/qwen_model.tar.gz
